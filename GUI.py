@@ -38,15 +38,15 @@ from video import *
 #### Create Window ####
 #######################
 
-tool_version = "4.0.1"
+tool_version = "1.0.0"
 
 root = customtkinter.CTk()
-root.title(f"Fayaz's Settings {tool_version} for Mario vs Donkey Kong")
+root.title(f"Fayaz's Settings {tool_version} for Echoes of Wisdom")
 root.geometry("540x760")
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")  
-windowtitle = customtkinter.CTkLabel(master=root, font=(CTkFont, 20), text="Fayaz's MVDK Utility {tool_version}")
+windowtitle = customtkinter.CTkLabel(master=root, font=(CTkFont, 20), text="Fayaz's Echoes of Wisdom Utility {tool_version}")
 
 ###############################################
 ###########    GLOBAL SETTINGS      ###########
@@ -257,7 +257,7 @@ def select_mario_folder():
     ratio_value = (int(numerator_entry.get()) / int(denominator_entry.get()))
     scaling_factor = (16/9) / (int(numerator_entry.get()) / int(denominator_entry.get()))
     username = getpass.getuser()
-    gameid = "0100B99019412000"
+    gameid = "01008cf01baac000"
     if output_yuzu.get() is True:
         input_folder = f"C:/Users/{username}/AppData/Roaming/yuzu/load/{gameid}"
         process_name = "yuzu.exe"
@@ -303,31 +303,18 @@ def select_mario_folder():
 
     download_extract_copy(input_folder, mod_name)
 
-    # Create the PCHTXT Files
-    visual_fixes = create_visuals(do_screenshot.get(), do_disable_fxaa.get(), do_disable_dynamicres.get())
-    create_patch_files(patch_folder, str(ratio_value), str(scaling_factor), visual_fixes, do_disable_bloom.get())
+    # # Create the PCHTXT Files
+    # visual_fixes = create_visuals(do_screenshot.get(), do_disable_fxaa.get(), do_disable_dynamicres.get())
+    # create_patch_files(patch_folder, str(ratio_value), str(scaling_factor), visual_fixes, do_disable_bloom.get())
 
     ##################
     ## Cutscene Fix ##
     ##################
     
     if do_video.get():
-        output_folder = os.path.join(romfs_folder, "Movie")
-        download_video_files(text_folder)
+        output_folder = os.path.join(romfs_folder, "region_common", "movie")
+        # download_video_files(text_folder)
         process_videos_in_folder(str(scaling_factor), output_folder)
-
-    #################
-    # ZS Extraction #
-    #################
-
-    for root, _, files in os.walk(romfs_folder):
-        for file in files:
-            if file.lower().endswith(".zs") and file.lower() != "usen.product.100.sarc.zs":
-                file_path = os.path.join(root, file)
-                print(f"Extracting {file}.")
-                decompress_zstd(file_path)
-                os.remove(file_path)
-
 
     ####################
     # BLARC Extraction #
@@ -335,7 +322,7 @@ def select_mario_folder():
 
     for root, _, files in os.walk(romfs_folder):
         for file in files:
-            if file.lower().endswith(".blarc"):
+            if file.lower().endswith(".arc"):
                 file_path = os.path.join(root, file)
                 print(f"Extracting {file}.")
                 extract_blarc(file_path)
@@ -356,11 +343,11 @@ def select_mario_folder():
     for root, dirs, _ in os.walk(romfs_folder):
         if "blyt" in dirs:
             parent_folder = os.path.dirname(root)
-            new_blarc_file = os.path.join(parent_folder, os.path.basename(root) + ".blarc")
+            new_blarc_file = os.path.join(parent_folder, os.path.basename(root) + ".arc")
             pack_folder_to_blarc(root, new_blarc_file)
             shutil.rmtree(root) 
-            compress_zstd(new_blarc_file)
-            os.remove(new_blarc_file)
+            # compress_zstd(new_blarc_file)
+            # os.remove(new_blarc_file)
 
     ##########################
     #          Finish        #
@@ -713,7 +700,7 @@ notebook.add("Credits")
 
 credits_label = ClickableLabel(master=notebook.tab("Credits"), text=
                     ('Utility created by fayaz\n'
-                     'https://github.com/fayaz12g/mvdk-aar\n'
+                     'https://github.com/fayaz12g/eow-aar\n'
                      'ko-fi.com/fayaz12\n'
                      '\n\nWith thanks to\n'
                      'fruithapje21\n'

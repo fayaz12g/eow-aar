@@ -59,6 +59,7 @@ ar_denominator = StringVar(value=f"{screen_height}")
 do_disable_fxaa = BooleanVar(value=True)
 do_disable_dynamicres = BooleanVar(value=True)
 do_video = BooleanVar(value=True)
+do_main = BooleanVar(value=False)
 do_disable_bloom = BooleanVar(value=True)
 do_screenshot = BooleanVar(value=True)
 do_expirements = BooleanVar(value=False)
@@ -86,7 +87,7 @@ button_layout = StringVar()
 
 # HUD
 centered_HUD = BooleanVar()
-corner_HUD = BooleanVar(value=True)
+corner_HUD = BooleanVar(value=False)
 
 # Generation
 output_yuzu = BooleanVar()
@@ -291,23 +292,6 @@ def select_mario_folder():
         HUD_pos = "center"
 
     ##################
-    ## Pre-Cleaning ##
-    ##################
-
-    if os.path.exists(text_folder):
-        shutil.rmtree(text_folder)
-
-    #################
-    ## Downloading ##
-    #################
-
-    download_extract_copy(input_folder, mod_name)
-
-    # # Create the PCHTXT Files
-    # visual_fixes = create_visuals(do_screenshot.get(), do_disable_fxaa.get(), do_disable_dynamicres.get())
-    # create_patch_files(patch_folder, str(ratio_value), str(scaling_factor), visual_fixes, do_disable_bloom.get())
-
-    ##################
     ## Cutscene Fix ##
     ##################
     
@@ -316,38 +300,57 @@ def select_mario_folder():
         # download_video_files(text_folder)
         process_videos_in_folder(str(scaling_factor), output_folder)
 
-    ####################
-    # BLARC Extraction #
-    ####################
+    if do_main.get():
 
-    for root, _, files in os.walk(romfs_folder):
-        for file in files:
-            if file.lower().endswith(".arc"):
-                file_path = os.path.join(root, file)
-                print(f"Extracting {file}.")
-                extract_blarc(file_path)
-                os.remove(file_path)
-                
-    ###########################
-    # Perform Pane Strecthing #
-    ###########################
+        ##################
+        ## Pre-Cleaning ##
+        ##################
 
-    patch_blarc(str(ratio_value), HUD_pos, romfs_folder, do_expirements.get())
+        if os.path.exists(text_folder):
+            shutil.rmtree(text_folder)
 
-    
-    ##########################
-    # Cleaning and Repacking #
-    ##########################
-    
-    print("Repacking new blarc files. This step may take about 10 seconds")
-    for root, dirs, _ in os.walk(romfs_folder):
-        if "blyt" in dirs:
-            parent_folder = os.path.dirname(root)
-            new_blarc_file = os.path.join(parent_folder, os.path.basename(root) + ".arc")
-            pack_folder_to_blarc(root, new_blarc_file)
-            shutil.rmtree(root) 
-            # compress_zstd(new_blarc_file)
-            # os.remove(new_blarc_file)
+        #################
+        ## Downloading ##
+        #################
+
+        download_extract_copy(input_folder, mod_name)
+
+        # # Create the PCHTXT Files
+        # visual_fixes = create_visuals(do_screenshot.get(), do_disable_fxaa.get(), do_disable_dynamicres.get())
+        # create_patch_files(patch_folder, str(ratio_value), str(scaling_factor), visual_fixes, do_disable_bloom.get())
+
+        ####################
+        # BLARC Extraction #
+        ####################
+
+        for root, _, files in os.walk(romfs_folder):
+            for file in files:
+                if file.lower().endswith(".arc"):
+                    file_path = os.path.join(root, file)
+                    print(f"Extracting {file}.")
+                    extract_blarc(file_path)
+                    os.remove(file_path)
+                    
+        ###########################
+        # Perform Pane Strecthing #
+        ###########################
+
+        patch_blarc(str(ratio_value), HUD_pos, romfs_folder, do_expirements.get())
+
+        
+        ##########################
+        # Cleaning and Repacking #
+        ##########################
+        
+        print("Repacking new blarc files. This step may take about 10 seconds")
+        for root, dirs, _ in os.walk(romfs_folder):
+            if "blyt" in dirs:
+                parent_folder = os.path.dirname(root)
+                new_blarc_file = os.path.join(parent_folder, os.path.basename(root) + ".arc")
+                pack_folder_to_blarc(root, new_blarc_file)
+                shutil.rmtree(root) 
+                # compress_zstd(new_blarc_file)
+                # os.remove(new_blarc_file)
 
     ##########################
     #          Finish        #

@@ -2,7 +2,7 @@ import os
 import struct
 from functions import *
 
-def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
+def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
     unpacked_folder = str(unpacked_folder)
     aspect_ratio = float(aspect_ratio)
     print(f"Aspect ratio is {aspect_ratio}")
@@ -71,10 +71,13 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             
     blyt_folder = os.path.abspath(os.path.join(unpacked_folder))
     
-    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu", "StaffRoll", "SmoothieBg"]
+    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu", "StaffRoll", "SmoothieBg", "BlindScreen"]
    
     rootpane_by_y = []
 
+    if cutscene_zoomed == "true":
+        rootpane_by_y = rootpane_by_y + ["Movie"]
+        do_not_scale_rootpane = do_not_scale_rootpane + ["Movie"]
     # Initialize a dictionary to store lists of paths
     file_paths = {}
     file_names_stripped = []
@@ -135,6 +138,8 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
 
         patch_blyt('SmoothieBgFront', 'W_FootSdw_00', 'scale_x', 1/s1)
 
+        patch_blyt('MapMenu', 'L_SubHeaderLine_00', 'scale_x', 1/s1)
+
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
             patch_blyt('Throbber', 'A_Save_00', 'shift_x', adjust_x(-900, s1))           
@@ -145,6 +150,10 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             patch_blyt('SetSlotUseItem', 'L_SetItem_00', 'shift_x', adjust_x(866, s1))
             patch_blyt('SystemMenu', 'N_List_00', 'shift_x', adjust_x(-652, s1))
             patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(355.79, s1))
+
+            patch_blyt('KeyItem', 'N_Key_00', 'shift_x', adjust_x(915, s1))       
+
+            patch_blyt('BuffTimer', 'L_BuffDescription_00', 'shift_x', adjust_x(-519, s1))  
 
             patch_blyt('SetSlotPasteActor', 'L_CopySetItem_00', 'shift_x', adjust_x(724, s1))
 
@@ -164,13 +173,23 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             patch_blyt('SetSlotLink', 'L_SetItem_01', 'shift_x', adjust_x(757, s1))
             patch_blyt('SetSlotLink', 'L_SetItem_02', 'shift_x', adjust_x(876, s1))
 
+            patch_blyt('FooterHelp', 'N_Interact_00', 'shift_x', adjust_x(900, s1))
+
             patch_blyt('QuestUpdate', 'N_InOut_00', 'shift_x', adjust_x(490, s1))
+
+            
+            patch_blyt('DressUp', 'N_PageInOut_00', 'shift_x', adjust_x(100, s1))
+            patch_blyt('DressUp', 'N_null_00', 'shift_x', adjust_x(-5, s1))
 
             patch_blyt('SmoothieBgFront', 'SmoothieFruitsSide_00', 'shift_x', adjust_x(-789, s1)) 
             patch_blyt('SmoothieBgFront', 'SmoothieFruitsSide_01', 'shift_x', adjust_x(789, s1))
             patch_blyt('SmoothieBgFront', 'SmoothieFruits_00', 'shift_x', adjust_x(-629, s1))
             patch_blyt('SmoothieBgFront', 'SmoothieFruits_01', 'shift_x', adjust_x(629, s1))
         
+            patch_blyt('SubQuestInformation', 'N_QuestComplete_00', 'shift_x', adjust_x(346, s1))
+            
+            patch_blyt('QuestInformation', 'N_QuestComplete_00', 'shift_x', adjust_x(346, s1))
+            
             patch_blyt('SmoothieChoose', 'N_Preview_01', 'shift_x', adjust_x(390, s1))
             patch_blyt('SmoothieChoose', 'N_Title_00', 'shift_x', adjust_x(-450, s1))
             patch_blyt('SmoothieChoose', 'N_ListPosition_00', 'shift_x', adjust_x(-450, s1))
@@ -181,6 +200,9 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             patch_blyt('Operate', 'N_InOut_00', 'shift_x', adjust_x(-853, s1))
 
             patch_blyt('MessageWindowGuide', 'N_DecideOut_00', 'shift_x', adjust_x(496, s1))
+
+            patch_blyt('MessageWindow', 'A_Choice_00', 'shift_x', adjust_x(725, s1))
+            patch_blyt('MessageWindowShop', 'A_Choice_00', 'shift_x', adjust_x(725, s1))
 
             patch_blyt('RecipeMenu', 'N_Title_00', 'shift_x', adjust_x(-450, s1))
             patch_blyt('RecipeMenu', 'N_ListPosition_00', 'shift_x', adjust_x(-450, s1))

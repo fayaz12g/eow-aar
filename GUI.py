@@ -38,7 +38,7 @@ from video import *
 #### Create Window ####
 #######################
 
-tool_version = "1.0.0"
+tool_version = "1.1.0"
 
 root = customtkinter.CTk()
 root.title(f"Fayaz's Settings {tool_version} for Echoes of Wisdom")
@@ -61,6 +61,7 @@ do_lod = BooleanVar(value=False)
 do_2k = BooleanVar(value=False)
 do_video = BooleanVar(value=False)
 do_main = BooleanVar(value=True)
+cutscene_zoomed = BooleanVar(value=False)
 
 
 
@@ -335,7 +336,7 @@ def select_mario_folder():
         # Perform Pane Strecthing #
         ###########################
 
-        patch_blarc(str(ratio_value), HUD_pos, romfs_folder)
+        patch_blarc(str(ratio_value), HUD_pos, romfs_folder, cutscene_zoomed.get())
 
         
         ##########################
@@ -349,8 +350,6 @@ def select_mario_folder():
                 new_blarc_file = os.path.join(parent_folder, os.path.basename(root) + ".arc")
                 pack_folder_to_blarc(root, new_blarc_file)
                 shutil.rmtree(root) 
-                # compress_zstd(new_blarc_file)
-                # os.remove(new_blarc_file)
 
     ##########################
     #          Finish        #
@@ -384,6 +383,7 @@ def pack_widgets():
     
     DOF_checkbox.pack(padx=5, pady=5)
     lod_checkbox.pack(padx=5, pady=5)
+    cutscene_checkbox.pack(padx=5, pady=5)
     shadow_checkbox.pack(padx=10, pady=10)
     
     image_label.pack()
@@ -448,6 +448,7 @@ def forget_packing():
     DOF_checkbox.pack_forget()
     lod_checkbox.pack_forget()
     shadow_checkbox.pack_forget()
+    cutscene_checkbox.pack_forget()
 
     image_label.pack_forget()
     image_layout_label.pack_forget()
@@ -526,6 +527,7 @@ denominator_entry.bind("<FocusOut>", lambda event: handle_focus_out(denominator_
 DOF_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Disable DOF", variable=do_DOF)
 lod_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Increase LOD", variable=do_lod)
 shadow_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="2X Shadow Resolution", variable=do_2k)
+cutscene_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Zoom in Cutscenes (and Title Screen)", variable=cutscene_zoomed)
 
 
 ##########################

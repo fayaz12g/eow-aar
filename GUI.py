@@ -56,9 +56,9 @@ windowtitle = customtkinter.CTkLabel(master=root, font=(CTkFont, 20), text="Faya
 screen_width, screen_height = pyautogui.size()
 ar_numerator = StringVar(value=f"{screen_width}")
 ar_denominator = StringVar(value=f"{screen_height}")
-do_DOF = BooleanVar(value=True)
-do_lod = BooleanVar(value=True)
-do_2k = BooleanVar(value=True)
+do_DOF = BooleanVar(value=False)
+do_lod = BooleanVar(value=False)
+do_2k = BooleanVar(value=False)
 do_video = BooleanVar(value=False)
 do_main = BooleanVar(value=True)
 
@@ -86,7 +86,7 @@ controller_color = StringVar()
 button_layout = StringVar()
 
 # HUD
-centered_HUD = BooleanVar(True)
+centered_HUD = BooleanVar()
 corner_HUD = BooleanVar(value=False)
 
 # Generation
@@ -382,9 +382,9 @@ def pack_widgets():
     aspect_ratio_divider.pack(side="left")
     denominator_entry.pack(side="left")
     
-    do_DOF.pack(padx=5, pady=5)
-    do_lod.pack(padx=5, pady=5)
-    do_2k.pack(padx=10, pady=10)
+    DOF_checkbox.pack(padx=5, pady=5)
+    lod_checkbox.pack(padx=5, pady=5)
+    shadow_checkbox.pack(padx=10, pady=10)
     
     image_label.pack()
 

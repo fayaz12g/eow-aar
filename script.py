@@ -71,7 +71,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             
     blyt_folder = os.path.abspath(os.path.join(unpacked_folder))
     
-    do_not_scale_rootpane = []
+    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen"]
    
     rootpane_by_y = []
 
@@ -122,9 +122,19 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
                 patch_blyt(name, 'RootPane', 'scale_y', 1/s1)
                 patch_blyt(name, 'RootPane', 'scale_x', 1)
 
+        patch_blyt('SubMenuHeader', 'N_Header_00', 'scale_x', 1/s1)
+        patch_blyt('SubMenuHeader', 'N_Footer_00', 'scale_x', 1/s1)
+        patch_blyt('MenuHeader', 'P_pict_04', 'scale_x', 1/s1)
+        patch_blyt('MenuHeader', 'N_Header_00', 'scale_x', 1/s1)
+        patch_blyt('MenuHeader', 'N_Footer_00', 'scale_x', 1/s1)
+
 
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
+            patch_blyt('Throbber', 'A_Save_00', 'shift_x', adjust_x(-900, s1))           
+            patch_blyt('Counter', 'L_Cost_00', 'shift_x', adjust_x(711, s1))
+            patch_blyt('SystemMenu', 'N_List_00', 'shift_x', adjust_x(-652, s1))
+            patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(264, s1))
 
 
 

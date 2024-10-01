@@ -2,7 +2,7 @@ import os
 import math
 from functions import *
 
-def create_patch_files(patch_folder, ratio_value, scaling_factor, visual_fixes, ultra_wide_camera):
+def create_patch_files(patch_folder, ratio_value, scaling_factor, visual_fixes):
 
     visual_fixesa = visual_fixes[0]
     scaling_factor = float(scaling_factor)

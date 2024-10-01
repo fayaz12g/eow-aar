@@ -5,6 +5,10 @@ import binascii
 import math
 import os
 
+def adjust_x(x_initial, scale_factor):
+    n_value = -1.01
+    return x_initial * scale_factor**n_value
+
 def make_hex(x, r):
     p = math.floor(math.log(x, 2))
     a = round(16*(p-2) + x / 2**(p-4))

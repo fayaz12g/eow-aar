@@ -77,12 +77,6 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, expiremental_menu):
    
     rootpane_by_y = []
 
-    # # Add the AAR Tag on the splash before scaling
-    # splash1 = os.path.join(unpacked_folder, "Layout", f"GameSplashScreen_00.Nin_NX_NVN", "blyt", f"GameSplashScreen_00.bflyt")
-    # splash2 = os.path.join(unpacked_folder, "UI", "LayoutArchive", f"Menu.Product.100.Nin_NX_NVN", "blyt", f"GameSplashScreen_00.bflyt")
-    # add_aar_tag(splash1)
-    # add_aar_tag(splash2)
-
     # Initialize a dictionary to store lists of paths
     file_paths = {}
     file_names_stripped = []
@@ -129,8 +123,6 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, expiremental_menu):
             if name in rootpane_by_y:
                 patch_blyt(name, 'RootPane', 'scale_y', 1/s1)
                 patch_blyt(name, 'RootPane', 'scale_x', 1)
-
-            print("Doing Expirements!")
 
 
         if HUD_pos == 'corner':

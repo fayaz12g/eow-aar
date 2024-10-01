@@ -56,13 +56,13 @@ windowtitle = customtkinter.CTkLabel(master=root, font=(CTkFont, 20), text="Faya
 screen_width, screen_height = pyautogui.size()
 ar_numerator = StringVar(value=f"{screen_width}")
 ar_denominator = StringVar(value=f"{screen_height}")
-do_disable_fxaa = BooleanVar(value=True)
-do_disable_dynamicres = BooleanVar(value=True)
-do_video = BooleanVar(value=True)
-do_main = BooleanVar(value=False)
-do_disable_bloom = BooleanVar(value=True)
-do_screenshot = BooleanVar(value=True)
-do_expirements = BooleanVar(value=False)
+do_DOF = BooleanVar(value=True)
+do_lod = BooleanVar(value=True)
+do_2k = BooleanVar(value=True)
+do_video = BooleanVar(value=False)
+do_main = BooleanVar(value=True)
+
+
 
 
 # Legacy Visuals
@@ -86,7 +86,7 @@ controller_color = StringVar()
 button_layout = StringVar()
 
 # HUD
-centered_HUD = BooleanVar()
+centered_HUD = BooleanVar(True)
 corner_HUD = BooleanVar(value=False)
 
 # Generation
@@ -315,9 +315,9 @@ def select_mario_folder():
 
         download_extract_copy(input_folder, mod_name)
 
-        # # Create the PCHTXT Files
-        # visual_fixes = create_visuals(do_screenshot.get(), do_disable_fxaa.get(), do_disable_dynamicres.get())
-        # create_patch_files(patch_folder, str(ratio_value), str(scaling_factor), visual_fixes, do_disable_bloom.get())
+        # Create the PCHTXT Files
+        visual_fixes = create_visuals(do_DOF.get(), do_lod.get(), do_2k.get())
+        create_patch_files(patch_folder, str(ratio_value), str(scaling_factor), visual_fixes)
 
         ####################
         # BLARC Extraction #
@@ -382,12 +382,9 @@ def pack_widgets():
     aspect_ratio_divider.pack(side="left")
     denominator_entry.pack(side="left")
     
-    fxaa_checkbox.pack(padx=5, pady=5)
-    screenshot_checkbox.pack(padx=5, pady=5)
-    dynamicres_checkbox.pack(padx=10, pady=10)
-    video_checkbox.pack(padx=10, pady=10)
-    bloom_checkbox.pack(padx=10, pady=10)
-    expirement_checkbox.pack(padx=10, pady=10)
+    do_DOF.pack(padx=5, pady=5)
+    do_lod.pack(padx=5, pady=5)
+    do_2k.pack(padx=10, pady=10)
     
     image_label.pack()
 
@@ -448,12 +445,9 @@ def forget_packing():
     aspect_ratio_divider.pack_forget()
     denominator_entry.pack_forget()
     
-    fxaa_checkbox.pack_forget()
-    screenshot_checkbox.pack_forget()
-    dynamicres_checkbox.pack_forget()
-    video_checkbox.pack_forget()
-    bloom_checkbox.pack_forget()
-    expirement_checkbox.pack_forget()
+    DOF_checkbox.pack_forget()
+    lod_checkbox.pack_forget()
+    shadow_checkbox.pack_forget()
 
     image_label.pack_forget()
     image_layout_label.pack_forget()
@@ -529,12 +523,10 @@ denominator_entry.configure(text_color='gray')
 denominator_entry.bind("<FocusIn>", lambda event: handle_focus_in(denominator_entry, f"{screen_height}"))
 denominator_entry.bind("<FocusOut>", lambda event: handle_focus_out(denominator_entry, f"{screen_height}"))
 
-fxaa_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="120 FPS (Expiremental)", variable=do_disable_fxaa)
-screenshot_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Disable Depth of Field", variable=do_screenshot)
-dynamicres_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="2880x1620 Docked", variable=do_disable_dynamicres)
-video_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Cutscenes Fix", variable=do_video)
-bloom_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Ultrawide Camera", variable=do_disable_bloom)
-expirement_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Expiremental Menu", variable=do_expirements)
+DOF_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Disable DOF", variable=do_DOF)
+lod_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Increase LOD", variable=do_lod)
+shadow_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="2X Shadow Resolution", variable=do_2k)
+
 
 ##########################
 ####### Controller #######
@@ -665,8 +657,6 @@ hud_label= customtkinter.CTkLabel(content_frame, text='Hud Location:')
 center_checkbox = customtkinter.CTkRadioButton(master=notebook.tab("HUD"), text="Center", variable=centered_HUD, value=1, command=lambda: [corner_HUD.set(False), repack_widgets])
 corner_checkbox = customtkinter.CTkRadioButton(master=notebook.tab("HUD"), text="Corner", variable=corner_HUD, value=2, command=lambda: [centered_HUD.set(False), repack_widgets])
 corner_checkbox.select()
-
-notebook.delete("HUD") # delete this line to readd HUD options
 
 ########################
 ####### GENERATE #######

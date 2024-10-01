@@ -33,26 +33,26 @@ def download_extract_copy(input_folder, mod_name):
 
     for zip_url, zip_filename in zip_urls:
         zip_file_source = os.path.join(directory_path, zip_filename)
-        # remote_hash = get_remote_file_hash(zip_url)
+        remote_hash = get_remote_file_hash(zip_url)
 
-        # # Check if file exists and verify its hash
-        # if os.path.isfile(zip_file_source):
-        #     local_hash = calculate_hash(zip_file_source)
-        #     if local_hash == remote_hash:
-        #         print(f"{zip_filename} is up to date.")
-        #         continue
-        #     else:
-        #         print(f"{zip_filename} is outdated. Downloading new version.")
-        # else:
-        #     print(f"{zip_filename} not found. Downloading.")
+        # Check if file exists and verify its hash
+        if os.path.isfile(zip_file_source):
+            local_hash = calculate_hash(zip_file_source)
+            if local_hash == remote_hash:
+                print(f"{zip_filename} is up to date.")
+                continue
+            else:
+                print(f"{zip_filename} is outdated. Downloading new version.")
+        else:
+            print(f"{zip_filename} not found. Downloading.")
 
-        # # Download the ZIP file
-        # response = requests.get(zip_url)
-        # response.raise_for_status()
-        # with open(zip_file_source, "wb") as file:
-        #     file.write(response.content)
+        # Download the ZIP file
+        response = requests.get(zip_url)
+        response.raise_for_status()
+        with open(zip_file_source, "wb") as file:
+            file.write(response.content)
 
-        # print(f"{zip_filename} downloaded and saved.")
+        print(f"{zip_filename} downloaded and saved.")
 
     # Extraction and copy logic
     zip_file_source = os.path.join(directory_path, zip_filename)
@@ -66,8 +66,5 @@ def download_extract_copy(input_folder, mod_name):
         zip_ref.extractall(extract_folder)
         print(f"Extracted {zip_filename} to {extract_folder}.")
 
-
-    # shutil.copytree(extract_folder, romfs_folder)
-    # print(f"Copied from {extract_folder} to {romfs_folder}.")
 
 

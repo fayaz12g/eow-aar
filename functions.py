@@ -24,21 +24,17 @@ def asm_to_hex(asm_code):
     encoding, count = ks.asm(asm_code)
     return ''.join('{:02x}'.format(x) for x in encoding)
 
-def mvdk_hex23(num):
+def eow_hex23(num):
     num = round(num, 15)
     packed = struct.pack('!f', num)
     full_hex = ''.join('{:02x}'.format(b) for b in packed)
     hex_1 = full_hex[:4]
     hex_2 = full_hex[4:]
-    asm_1 = f"movz w10, #0x{hex_2}"
-    asm_2 = f"movk w10, #0x{hex_1}, lsl #16"
-    asm_3 = f"movz w8, #0x{hex_2}"
-    asm_4 = f"movk w8, #0x{hex_1}, lsl #16"
+    asm_1 = f"movz w9, #0x{hex_2}"
+    asm_2 = f"movk w9, #0x{hex_1}, lsl #16"
     hex_value1 = asm_to_hex(asm_1)
     hex_value2 = asm_to_hex(asm_2)
-    hex_value3 = asm_to_hex(asm_3)
-    hex_value4 = asm_to_hex(asm_4)
-    return hex_value1, hex_value2, hex_value3, hex_value4
+    return hex_value1, hex_value2
 
 def float2hex(f):
         return hex(struct.unpack('>I', struct.pack('<f', f))[0]).lstrip('0x').rjust(8,'0').upper()

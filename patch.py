@@ -9,7 +9,7 @@ def create_patch_files(patch_folder, ratio_value, scaling_factor, visual_fixes):
     ratio_value = float(ratio_value)
     print(f"The scaling factor is {scaling_factor}.")
     hex_value = make_hex(1.75, 0)
-    hex_value1, hex_value2, hex_value3, hex_value4 = mvdk_hex23(ratio_value)
+    hex_value1, hex_value2= eow_hex23(ratio_value)
     version_variables = ["1.0.1"]
     for version_variable in version_variables:
         file_name = f"main-{version_variable}.pchtxt"

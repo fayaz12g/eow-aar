@@ -168,6 +168,12 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
             patch_blyt('L_PasteActorSelectList', 'P_pict_01', 'shift_x', adjust_x(911, s1)) 
             patch_blyt('L_PasteActorSelectList', 'P_pict_00', 'shift_x', adjust_x(-911, s1)) 
 
+            patch_blyt('L_MachineSelectList', 'P_pict_01', 'shift_x', adjust_x(911, s1)) 
+            patch_blyt('L_MachineSelectList', 'P_pict_00', 'shift_x', adjust_x(-911, s1)) 
+
+            patch_blyt('MiniGameQuitHelp', 'N_Interact_00', 'shift_x', adjust_x(900, s1)) 
+            patch_blyt('MiniGameQuitHelp', 'L_Interact_00', 'shift_x', adjust_x(-1760, s1)) 
+
             patch_blyt('CollectMenu', 'N_ZeldaLinkItem_00', 'shift_x', adjust_x(-346, s1)) 
             patch_blyt('CollectMenu', 'L_Item_21', 'shift_x', adjust_x(-716, s1))
             patch_blyt('CollectMenu', 'N_Proof_00', 'shift_x', adjust_x(332, s1)) 

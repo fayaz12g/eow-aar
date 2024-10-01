@@ -8,7 +8,6 @@ def create_patch_files(patch_folder, ratio_value, scaling_factor, visual_fixes):
     scaling_factor = float(scaling_factor)
     ratio_value = float(ratio_value)
     print(f"The scaling factor is {scaling_factor}.")
-    hex_value = make_hex(1.75, 0)
     hex_value1, hex_value2= eow_hex23(ratio_value)
     version_variables = ["1.0.1"]
     for version_variable in version_variables:
@@ -27,8 +26,8 @@ def create_patch_files(patch_folder, ratio_value, scaling_factor, visual_fixes):
 @flag offset_shift 0x100
 
 @enabled
-00348b6c C9719C52
-00348b70 0903A872
+00348b6c {hex_value1}
+00348b70 {hex_value2}
 @disabled
 
 {visual_fix}

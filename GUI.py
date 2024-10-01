@@ -527,7 +527,7 @@ denominator_entry.bind("<FocusOut>", lambda event: handle_focus_out(denominator_
 DOF_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Disable DOF", variable=do_DOF)
 lod_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Increase LOD", variable=do_lod)
 shadow_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="2X Shadow Resolution", variable=do_2k)
-cutscene_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Zoom in Cutscenes (and Title Screen)", variable=cutscene_zoomed)
+cutscene_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Zoomed Cutscenes (and Title Screen)", variable=cutscene_zoomed)
 
 
 ##########################

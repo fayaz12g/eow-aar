@@ -75,9 +75,10 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
    
     rootpane_by_y = []
 
-    if cutscene_zoomed == "true":
+    if cutscene_zoomed:
         rootpane_by_y = rootpane_by_y + ["Movie"]
         do_not_scale_rootpane = do_not_scale_rootpane + ["Movie"]
+
     # Initialize a dictionary to store lists of paths
     file_paths = {}
     file_names_stripped = []
@@ -93,7 +94,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                     file_paths[modified_name] = []
                 file_paths[modified_name].append(full_path)
 
-        # Initialize a dictionary to store lists of paths
+    # Initialize a dictionary to store lists of paths
     anim_file_paths = {}
     anim_file_names_stripped = []
 
@@ -140,6 +141,9 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
 
         patch_blyt('MapMenu', 'L_SubHeaderLine_00', 'scale_x', 1/s1)
 
+        patch_blyt('ScreenMainMenu', 'RootPane', 'scale_x', 1/s1)
+
+
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
             patch_blyt('Throbber', 'A_Save_00', 'shift_x', adjust_x(-900, s1))           
@@ -160,6 +164,9 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
             patch_blyt('LinkGauge', 'N_InOut_00', 'shift_x', adjust_x(-918, s1)) 
             patch_blyt('PartnerGauge', 'N_Offset_00', 'shift_x', adjust_x(838, s1)) 
             patch_blyt('PartnerGauge', 'W_window_02', 'shift_x', adjust_x(938, s1)) 
+
+            patch_blyt('L_PasteActorSelectList', 'P_pict_01', 'shift_x', adjust_x(911, s1)) 
+            patch_blyt('L_PasteActorSelectList', 'P_pict_00', 'shift_x', adjust_x(-911, s1)) 
 
             patch_blyt('CollectMenu', 'N_ZeldaLinkItem_00', 'shift_x', adjust_x(-346, s1)) 
             patch_blyt('CollectMenu', 'L_Item_21', 'shift_x', adjust_x(-716, s1))

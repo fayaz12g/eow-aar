@@ -71,7 +71,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             
     blyt_folder = os.path.abspath(os.path.join(unpacked_folder))
     
-    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu", "StaffRoll"]
+    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu", "StaffRoll", "SmoothieBg"]
    
     rootpane_by_y = []
 
@@ -133,15 +133,20 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
         patch_blyt('L_CommonModal', 'N_Win_00', 'scale_x', 1/s1)
         patch_blyt('L_CommonModal', 'S_Graphic_00', 'scale_x', 1/s1)
 
+        patch_blyt('SmoothieBgFront', 'W_FootSdw_00', 'scale_x', 1/s1)
 
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
             patch_blyt('Throbber', 'A_Save_00', 'shift_x', adjust_x(-900, s1))           
             patch_blyt('Counter', 'L_Cost_00', 'shift_x', adjust_x(711, s1))
+            patch_blyt('CountCost', 'P_Base_00', 'shift_x', adjust_x(1002, s1))
+            patch_blyt('CountCost', 'L_Cost_00', 'shift_x', adjust_x(711, s1))
             patch_blyt('HeartGaugeList', 'N_Life_00', 'shift_x', adjust_x(-903, s1))
             patch_blyt('SetSlotUseItem', 'L_SetItem_00', 'shift_x', adjust_x(866, s1))
             patch_blyt('SystemMenu', 'N_List_00', 'shift_x', adjust_x(-652, s1))
             patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(355.79, s1))
+
+            patch_blyt('SetSlotPasteActor', 'L_CopySetItem_00', 'shift_x', adjust_x(724, s1))
 
             patch_blyt('LinkGauge', 'N_InOut_00', 'shift_x', adjust_x(-918, s1)) 
             patch_blyt('PartnerGauge', 'N_Offset_00', 'shift_x', adjust_x(838, s1)) 
@@ -154,6 +159,32 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             patch_blyt('CollectMenu', 'N_Bottle_00', 'shift_x', adjust_x(112, s1)) 
             patch_blyt('CollectMenu', 'N_PartnerLevel_00', 'shift_x', adjust_x(-352, s1))
             patch_blyt('CollectMenu', 'L_BtnChoice_00', 'shift_x', adjust_x(232, s1))
+
+            patch_blyt('SetSlotLink', 'L_SetItem_00', 'shift_x', adjust_x(638, s1)) 
+            patch_blyt('SetSlotLink', 'L_SetItem_01', 'shift_x', adjust_x(757, s1))
+            patch_blyt('SetSlotLink', 'L_SetItem_02', 'shift_x', adjust_x(876, s1))
+
+            patch_blyt('QuestUpdate', 'N_InOut_00', 'shift_x', adjust_x(490, s1))
+
+            patch_blyt('SmoothieBgFront', 'SmoothieFruitsSide_00', 'shift_x', adjust_x(-789, s1)) 
+            patch_blyt('SmoothieBgFront', 'SmoothieFruitsSide_01', 'shift_x', adjust_x(789, s1))
+            patch_blyt('SmoothieBgFront', 'SmoothieFruits_00', 'shift_x', adjust_x(-629, s1))
+            patch_blyt('SmoothieBgFront', 'SmoothieFruits_01', 'shift_x', adjust_x(629, s1))
+        
+            patch_blyt('SmoothieChoose', 'N_Preview_01', 'shift_x', adjust_x(390, s1))
+            patch_blyt('SmoothieChoose', 'N_Title_00', 'shift_x', adjust_x(-450, s1))
+            patch_blyt('SmoothieChoose', 'N_ListPosition_00', 'shift_x', adjust_x(-450, s1))
+
+            patch_blyt('SmoothieMenu', 'N_List_00', 'shift_x', adjust_x(-516, s1))
+            patch_blyt('SmoothieMenu', 'N_Select_00', 'shift_x', adjust_x(-78, s1))
+
+            patch_blyt('Operate', 'N_InOut_00', 'shift_x', adjust_x(-853, s1))
+
+            patch_blyt('MessageWindowGuide', 'N_DecideOut_00', 'shift_x', adjust_x(496, s1))
+
+            patch_blyt('RecipeMenu', 'N_Title_00', 'shift_x', adjust_x(-450, s1))
+            patch_blyt('RecipeMenu', 'N_ListPosition_00', 'shift_x', adjust_x(-450, s1))
+            patch_blyt('RecipeMenu', 'N_Preview_00', 'shift_x', adjust_x(390, s1))
 
             patch_blyt('LinkItemMenu', 'A_Rupee_00', 'shift_x', adjust_x(766, s1))
 

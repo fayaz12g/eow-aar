@@ -335,7 +335,7 @@ def select_mario_folder():
         # Perform Pane Strecthing #
         ###########################
 
-        patch_blarc(str(ratio_value), HUD_pos, romfs_folder, do_expirements.get())
+        patch_blarc(str(ratio_value), HUD_pos, romfs_folder)
 
         
         ##########################

@@ -2,16 +2,14 @@ import os
 import struct
 from functions import *
 
-def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, expiremental_menu):
+def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
     unpacked_folder = str(unpacked_folder)
     aspect_ratio = float(aspect_ratio)
     print(f"Aspect ratio is {aspect_ratio}")
     HUD_pos = str(HUD_pos)
-    # expiremental_menu = eval(expiremental_menu)
 
     file_paths = {}
 
-    broken_names = ["PaMenu_Btn_Level", "PaMenu_Btn_Slot"]
     def patch_blyt(filename, pane, operation, value):
         if operation in ["scale_x", "scale_y"]:
             if value < 1:

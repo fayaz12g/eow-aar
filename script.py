@@ -71,7 +71,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             
     blyt_folder = os.path.abspath(os.path.join(unpacked_folder))
     
-    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen"]
+    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu"]
    
     rootpane_by_y = []
 
@@ -133,8 +133,18 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             print("Shifitng elements for corner HUD")
             patch_blyt('Throbber', 'A_Save_00', 'shift_x', adjust_x(-900, s1))           
             patch_blyt('Counter', 'L_Cost_00', 'shift_x', adjust_x(711, s1))
+            patch_blyt('HeartGaugeList', 'N_Life_00', 'shift_x', adjust_x(-903, s1))
+            patch_blyt('SetSlotUseItem', 'L_SetItem_00', 'shift_x', adjust_x(866, s1))
             patch_blyt('SystemMenu', 'N_List_00', 'shift_x', adjust_x(-652, s1))
-            patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(264, s1))
+            patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(355.79, s1))
+
+            patch_blyt('CollectMenu', 'N_ZeldaLinkItem_00', 'shift_x', adjust_x(-346, s1)) 
+            patch_blyt('CollectMenu', 'L_Item_21', 'shift_x', adjust_x(-716, s1))
+            patch_blyt('CollectMenu', 'N_Proof_00', 'shift_x', adjust_x(332, s1)) 
+            patch_blyt('CollectMenu', 'N_StampCard_00', 'shift_x', adjust_x(122, s1))
+            patch_blyt('CollectMenu', 'N_Bottle_00', 'shift_x', adjust_x(112, s1)) 
+            patch_blyt('CollectMenu', 'N_PartnerLevel_00', 'shift_x', adjust_x(-352, s1))
+            patch_blyt('CollectMenu', 'L_BtnChoice_00', 'shift_x', adjust_x(232, s1))
 
 
 

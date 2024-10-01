@@ -71,7 +71,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             
     blyt_folder = os.path.abspath(os.path.join(unpacked_folder))
     
-    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu"]
+    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu", "StaffRoll"]
    
     rootpane_by_y = []
 
@@ -127,6 +127,11 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
         patch_blyt('MenuHeader', 'P_pict_04', 'scale_x', 1/s1)
         patch_blyt('MenuHeader', 'N_Header_00', 'scale_x', 1/s1)
         patch_blyt('MenuHeader', 'N_Footer_00', 'scale_x', 1/s1)
+        patch_blyt('ScreenCapture', 'RootPane', 'scale_x', 1/s1)
+
+        patch_blyt('L_CommonModal', 'P_footer_00', 'scale_x', 1/s1)
+        patch_blyt('L_CommonModal', 'N_Win_00', 'scale_x', 1/s1)
+        patch_blyt('L_CommonModal', 'S_Graphic_00', 'scale_x', 1/s1)
 
 
         if HUD_pos == 'corner':
@@ -138,6 +143,10 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             patch_blyt('SystemMenu', 'N_List_00', 'shift_x', adjust_x(-652, s1))
             patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(355.79, s1))
 
+            patch_blyt('LinkGauge', 'N_InOut_00', 'shift_x', adjust_x(-918, s1)) 
+            patch_blyt('PartnerGauge', 'N_Offset_00', 'shift_x', adjust_x(838, s1)) 
+            patch_blyt('PartnerGauge', 'W_window_02', 'shift_x', adjust_x(938, s1)) 
+
             patch_blyt('CollectMenu', 'N_ZeldaLinkItem_00', 'shift_x', adjust_x(-346, s1)) 
             patch_blyt('CollectMenu', 'L_Item_21', 'shift_x', adjust_x(-716, s1))
             patch_blyt('CollectMenu', 'N_Proof_00', 'shift_x', adjust_x(332, s1)) 
@@ -146,6 +155,10 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder):
             patch_blyt('CollectMenu', 'N_PartnerLevel_00', 'shift_x', adjust_x(-352, s1))
             patch_blyt('CollectMenu', 'L_BtnChoice_00', 'shift_x', adjust_x(232, s1))
 
+            patch_blyt('LinkItemMenu', 'A_Rupee_00', 'shift_x', adjust_x(766, s1))
+
+            # Adjust the title in the title scene animation
+            patch_blyt('Title', 'N_InOut_00', 'shift_x', adjust_x(-478, s1))
 
 
         # To mirror an object, do -x scale, and 180 roate y. For example, if we want to mirror something that is 

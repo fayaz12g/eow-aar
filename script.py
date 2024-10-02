@@ -10,7 +10,12 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
 
     file_paths = {}
 
-    def patch_ui_layouts(layout_map):
+    def patch_ui_layouts(layout_map, direction):
+        if direction == "x":
+            offset = 0x40
+        if direction == 'y':
+            offset = 0x48
+
         for filename, panes in layout_map.items():
             modified_name = filename + "_name"
             paths = file_paths.get(modified_name, [])
@@ -28,7 +33,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                 for pane in panes:
                     pane_hex = pane.encode('utf-8').hex()
                     start_pane = content.index(pane_hex, start_rootpane)
-                    idx = start_pane + 0x40  # Offset for shift_x
+                    idx = start_pane + offset 
                     
                     current_value_hex = content[idx:idx+8]
                     current_value = hex2float(current_value_hex)
@@ -181,7 +186,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
 
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
-            layout_map = {
+            x_layout_map = {
                 'Throbber': ['A_Save_00'],
                 'Counter': ['L_Cost_00'],
                 'CountCost': ['P_Base_00', 'L_Cost_00'],
@@ -218,7 +223,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                 'LinkItemMenu': ['A_Rupee_00'],
                 'Title': ['N_InOut_00']
             }
-            patch_ui_layouts(layout_map)
+            patch_ui_layouts(x_layout_map, "x")
 
         # To mirror an object, do -x scale, and 180 roate y. For example, if we want to mirror something that is 
 
@@ -236,5 +241,43 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
              
     
 
-        # if HUD_pos == 'corner':
-        #     print("Shifitng elements for corner HUD")
+        if HUD_pos == 'corner':
+            print("Shifitng elements for corner HUD")
+            y_layout_map = {
+                'Throbber': ['A_Save_00'],
+                'Counter': ['L_Cost_00'],
+                'CountCost': ['P_Base_00', 'L_Cost_00'],
+                'HeartGaugeList': ['N_Life_00'],
+                'SetSlotUseItem': ['L_SetItem_00'],
+                'SystemMenu': ['N_List_00', 'L_ControllerKeyConfig_00'],
+                'MapMenu': ['L_Item_00'],
+                'KeyItem': ['N_Key_00'],
+                'BuffTimer': ['L_BuffDescription_00'],
+                'SetSlotPasteActor': ['L_CopySetItem_00'],
+                'LinkGauge': ['N_InOut_00'],
+                'PartnerGauge': ['N_Offset_00', 'W_window_02'],
+                'L_PasteActorSelectList': ['P_pict_01', 'P_pict_00'],
+                'LocationInfoField': ['N_InOut_00'],
+                'L_MachineSelectList': ['P_pict_01', 'P_pict_00'],
+                'WorldGlobePieceSensor': ['N_Sensor_00'],
+                'MiniGameQuitHelp': ['N_Interact_00', 'L_Interact_00'],
+                'CollectMenu': ['N_ZeldaLinkItem_00', 'L_Item_21', 'N_Proof_00', 'N_StampCard_00', 'N_Bottle_00', 'N_PartnerLevel_00', 'L_BtnChoice_00'],
+                'MapFilter': ['N_InOut_00'],
+                'SetSlotLink': ['L_SetItem_00', 'L_SetItem_01', 'L_SetItem_02'],
+                'FooterHelp': ['N_Interact_00'],
+                'QuestUpdate': ['N_InOut_00'],
+                'DressUp': ['N_PageInOut_00', 'N_null_00'],
+                'SmoothieBgFront': ['SmoothieFruitsSide_00', 'SmoothieFruitsSide_01', 'SmoothieFruits_00', 'SmoothieFruits_01'],
+                'SubQuestInformation': ['N_QuestComplete_00'],
+                'QuestInformation': ['N_QuestComplete_00'],
+                'SmoothieChoose': ['N_Preview_01', 'N_Title_00', 'N_ListPosition_00'],
+                'SmoothieMenu': ['N_List_00', 'N_Select_00'],
+                'Operate': ['N_InOut_00'],
+                'MessageWindowGuide': ['N_DecideOut_00'],
+                'MessageWindow': ['A_Choice_00'],
+                'MessageWindowShop': ['A_Choice_00'],
+                'RecipeMenu': ['N_Title_00', 'N_ListPosition_00', 'N_Preview_00'],
+                'LinkItemMenu': ['A_Rupee_00'],
+                'Title': ['N_InOut_00']
+            }
+        patch_ui_layouts(y_layout_map, "y")

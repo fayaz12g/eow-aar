@@ -155,6 +155,8 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
             patch_blyt('SystemMenu', 'N_List_00', 'shift_x', adjust_x(-652, s1))
             patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(355.79, s1))
 
+            patch_blyt('MapMenu', 'L_Item_00', 'shift_x', adjust_x(693, s1))
+
             patch_blyt('KeyItem', 'N_Key_00', 'shift_x', adjust_x(915, s1))       
 
             patch_blyt('BuffTimer', 'L_BuffDescription_00', 'shift_x', adjust_x(-519, s1))  
@@ -167,6 +169,8 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
 
             patch_blyt('L_PasteActorSelectList', 'P_pict_01', 'shift_x', adjust_x(911, s1)) 
             patch_blyt('L_PasteActorSelectList', 'P_pict_00', 'shift_x', adjust_x(-911, s1)) 
+
+            patch_blyt('LocationInfoField', 'N_InOut_00', 'shift_x', adjust_x(-960, s1)) 
 
             patch_blyt('L_MachineSelectList', 'P_pict_01', 'shift_x', adjust_x(911, s1)) 
             patch_blyt('L_MachineSelectList', 'P_pict_00', 'shift_x', adjust_x(-911, s1)) 
@@ -182,6 +186,8 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
             patch_blyt('CollectMenu', 'N_PartnerLevel_00', 'shift_x', adjust_x(-352, s1))
             patch_blyt('CollectMenu', 'L_BtnChoice_00', 'shift_x', adjust_x(232, s1))
 
+            patch_blyt('MapFilter', 'N_InOut_00', 'shift_x', adjust_x(-622, s1))
+        
             patch_blyt('SetSlotLink', 'L_SetItem_00', 'shift_x', adjust_x(638, s1)) 
             patch_blyt('SetSlotLink', 'L_SetItem_01', 'shift_x', adjust_x(757, s1))
             patch_blyt('SetSlotLink', 'L_SetItem_02', 'shift_x', adjust_x(876, s1))

@@ -5,10 +5,6 @@ import binascii
 import math
 import os
 
-def adjust_x(x_initial, scale_factor):
-    n_value = -1.01
-    return x_initial * scale_factor**n_value
-
 def make_hex(x, r):
     p = math.floor(math.log(x, 2))
     a = round(16*(p-2) + x / 2**(p-4))
@@ -18,6 +14,9 @@ def make_hex(x, r):
     hex_value = f'0{r}' + h[1] + '02' + h[0] + '1E' 
     print(hex_value)
     return hex_value
+
+def hex2float(h):
+    return struct.unpack('>f', bytes.fromhex(h))[0]
 
 def asm_to_hex(asm_code):
     ks = Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)

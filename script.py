@@ -10,6 +10,39 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
 
     file_paths = {}
 
+    def patch_ui_layouts(layout_map):
+        for filename, panes in layout_map.items():
+            modified_name = filename + "_name"
+            paths = file_paths.get(modified_name, [])
+            
+            if not paths:
+                default_path = os.path.join(unpacked_folder, "region_common", "ui", "GameMain", "blyt", f"{filename}.bflyt")
+                paths.append(default_path)
+            
+            for full_path_of_file in paths:
+                with open(full_path_of_file, 'rb') as f:
+                    content = f.read().hex()
+                
+                start_rootpane = content.index(b'RootPane'.hex())
+                
+                for pane in panes:
+                    pane_hex = pane.encode('utf-8').hex()
+                    start_pane = content.index(pane_hex, start_rootpane)
+                    idx = start_pane + 0x40  # Offset for shift_x
+                    
+                    current_value_hex = content[idx:idx+8]
+                    current_value = hex2float(current_value_hex)
+                    
+                    new_value = (current_value * s1**-1)
+                    new_value_hex = float2hex(new_value)
+                    
+                    content = content[:idx] + new_value_hex + content[idx+8:]
+                    
+                    print(f"Shifting {pane} of {filename}")
+                
+                with open(full_path_of_file, 'wb') as f:
+                    f.write(bytes.fromhex(content))
+
     def patch_blyt(filename, pane, operation, value):
         if operation in ["scale_x", "scale_y"]:
             if value < 1:
@@ -146,94 +179,44 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
 
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
-            patch_blyt('Throbber', 'A_Save_00', 'shift_x', adjust_x(-900, s1))           
-            patch_blyt('Counter', 'L_Cost_00', 'shift_x', adjust_x(711, s1))
-            patch_blyt('CountCost', 'P_Base_00', 'shift_x', adjust_x(1002, s1))
-            patch_blyt('CountCost', 'L_Cost_00', 'shift_x', adjust_x(711, s1))
-            patch_blyt('HeartGaugeList', 'N_Life_00', 'shift_x', adjust_x(-903, s1))
-            patch_blyt('SetSlotUseItem', 'L_SetItem_00', 'shift_x', adjust_x(866, s1))
-            patch_blyt('SystemMenu', 'N_List_00', 'shift_x', adjust_x(-652, s1))
-            patch_blyt('SystemMenu', 'L_ControllerKeyConfig_00', 'shift_x', adjust_x(355.79, s1))
-
-            patch_blyt('MapMenu', 'L_Item_00', 'shift_x', adjust_x(693, s1))
-
-            patch_blyt('KeyItem', 'N_Key_00', 'shift_x', adjust_x(915, s1))       
-
-            patch_blyt('BuffTimer', 'L_BuffDescription_00', 'shift_x', adjust_x(-519, s1))  
-
-            patch_blyt('SetSlotPasteActor', 'L_CopySetItem_00', 'shift_x', adjust_x(724, s1))
-
-            patch_blyt('LinkGauge', 'N_InOut_00', 'shift_x', adjust_x(-918, s1)) 
-            patch_blyt('PartnerGauge', 'N_Offset_00', 'shift_x', adjust_x(838, s1)) 
-            patch_blyt('PartnerGauge', 'W_window_02', 'shift_x', adjust_x(938, s1)) 
-
-            patch_blyt('L_PasteActorSelectList', 'P_pict_01', 'shift_x', adjust_x(911, s1)) 
-            patch_blyt('L_PasteActorSelectList', 'P_pict_00', 'shift_x', adjust_x(-911, s1)) 
-
-            patch_blyt('LocationInfoField', 'N_InOut_00', 'shift_x', adjust_x(-960, s1)) 
-
-            patch_blyt('L_MachineSelectList', 'P_pict_01', 'shift_x', adjust_x(911, s1)) 
-            patch_blyt('L_MachineSelectList', 'P_pict_00', 'shift_x', adjust_x(-911, s1)) 
-
-            patch_blyt('WorldGlobePieceSensor', 'N_Sensor_00', 'shift_x', adjust_x(597, s1)) 
-
-            patch_blyt('MiniGameQuitHelp', 'N_Interact_00', 'shift_x', adjust_x(900, s1)) 
-            patch_blyt('MiniGameQuitHelp', 'L_Interact_00', 'shift_x', adjust_x(-1760, s1)) 
-
-            patch_blyt('CollectMenu', 'N_ZeldaLinkItem_00', 'shift_x', adjust_x(-346, s1)) 
-            patch_blyt('CollectMenu', 'L_Item_21', 'shift_x', adjust_x(-716, s1))
-            patch_blyt('CollectMenu', 'N_Proof_00', 'shift_x', adjust_x(332, s1)) 
-            patch_blyt('CollectMenu', 'N_StampCard_00', 'shift_x', adjust_x(122, s1))
-            patch_blyt('CollectMenu', 'N_Bottle_00', 'shift_x', adjust_x(112, s1)) 
-            patch_blyt('CollectMenu', 'N_PartnerLevel_00', 'shift_x', adjust_x(-352, s1))
-            patch_blyt('CollectMenu', 'L_BtnChoice_00', 'shift_x', adjust_x(232, s1))
-
-            patch_blyt('MapFilter', 'N_InOut_00', 'shift_x', adjust_x(-622, s1))
-        
-            patch_blyt('SetSlotLink', 'L_SetItem_00', 'shift_x', adjust_x(638, s1)) 
-            patch_blyt('SetSlotLink', 'L_SetItem_01', 'shift_x', adjust_x(757, s1))
-            patch_blyt('SetSlotLink', 'L_SetItem_02', 'shift_x', adjust_x(876, s1))
-
-            patch_blyt('FooterHelp', 'N_Interact_00', 'shift_x', adjust_x(900, s1))
-
-            patch_blyt('QuestUpdate', 'N_InOut_00', 'shift_x', adjust_x(490, s1))
-
-            
-            patch_blyt('DressUp', 'N_PageInOut_00', 'shift_x', adjust_x(100, s1))
-            patch_blyt('DressUp', 'N_null_00', 'shift_x', adjust_x(-5, s1))
-
-            patch_blyt('SmoothieBgFront', 'SmoothieFruitsSide_00', 'shift_x', adjust_x(-789, s1)) 
-            patch_blyt('SmoothieBgFront', 'SmoothieFruitsSide_01', 'shift_x', adjust_x(789, s1))
-            patch_blyt('SmoothieBgFront', 'SmoothieFruits_00', 'shift_x', adjust_x(-629, s1))
-            patch_blyt('SmoothieBgFront', 'SmoothieFruits_01', 'shift_x', adjust_x(629, s1))
-        
-            patch_blyt('SubQuestInformation', 'N_QuestComplete_00', 'shift_x', adjust_x(346, s1))
-            
-            patch_blyt('QuestInformation', 'N_QuestComplete_00', 'shift_x', adjust_x(346, s1))
-            
-            patch_blyt('SmoothieChoose', 'N_Preview_01', 'shift_x', adjust_x(390, s1))
-            patch_blyt('SmoothieChoose', 'N_Title_00', 'shift_x', adjust_x(-450, s1))
-            patch_blyt('SmoothieChoose', 'N_ListPosition_00', 'shift_x', adjust_x(-450, s1))
-
-            patch_blyt('SmoothieMenu', 'N_List_00', 'shift_x', adjust_x(-516, s1))
-            patch_blyt('SmoothieMenu', 'N_Select_00', 'shift_x', adjust_x(-78, s1))
-
-            patch_blyt('Operate', 'N_InOut_00', 'shift_x', adjust_x(-853, s1))
-
-            patch_blyt('MessageWindowGuide', 'N_DecideOut_00', 'shift_x', adjust_x(496, s1))
-
-            patch_blyt('MessageWindow', 'A_Choice_00', 'shift_x', adjust_x(725, s1))
-            patch_blyt('MessageWindowShop', 'A_Choice_00', 'shift_x', adjust_x(725, s1))
-
-            patch_blyt('RecipeMenu', 'N_Title_00', 'shift_x', adjust_x(-450, s1))
-            patch_blyt('RecipeMenu', 'N_ListPosition_00', 'shift_x', adjust_x(-450, s1))
-            patch_blyt('RecipeMenu', 'N_Preview_00', 'shift_x', adjust_x(390, s1))
-
-            patch_blyt('LinkItemMenu', 'A_Rupee_00', 'shift_x', adjust_x(766, s1))
-
-            # Adjust the title in the title scene animation
-            patch_blyt('Title', 'N_InOut_00', 'shift_x', adjust_x(-478, s1))
-
+            layout_map = {
+                'Throbber': ['A_Save_00'],
+                'Counter': ['L_Cost_00'],
+                'CountCost': ['P_Base_00', 'L_Cost_00'],
+                'HeartGaugeList': ['N_Life_00'],
+                'SetSlotUseItem': ['L_SetItem_00'],
+                'SystemMenu': ['N_List_00', 'L_ControllerKeyConfig_00'],
+                'MapMenu': ['L_Item_00'],
+                'KeyItem': ['N_Key_00'],
+                'BuffTimer': ['L_BuffDescription_00'],
+                'SetSlotPasteActor': ['L_CopySetItem_00'],
+                'LinkGauge': ['N_InOut_00'],
+                'PartnerGauge': ['N_Offset_00', 'W_window_02'],
+                'L_PasteActorSelectList': ['P_pict_01', 'P_pict_00'],
+                'LocationInfoField': ['N_InOut_00'],
+                'L_MachineSelectList': ['P_pict_01', 'P_pict_00'],
+                'WorldGlobePieceSensor': ['N_Sensor_00'],
+                'MiniGameQuitHelp': ['N_Interact_00', 'L_Interact_00'],
+                'CollectMenu': ['N_ZeldaLinkItem_00', 'L_Item_21', 'N_Proof_00', 'N_StampCard_00', 'N_Bottle_00', 'N_PartnerLevel_00', 'L_BtnChoice_00'],
+                'MapFilter': ['N_InOut_00'],
+                'SetSlotLink': ['L_SetItem_00', 'L_SetItem_01', 'L_SetItem_02'],
+                'FooterHelp': ['N_Interact_00'],
+                'QuestUpdate': ['N_InOut_00'],
+                'DressUp': ['N_PageInOut_00', 'N_null_00'],
+                'SmoothieBgFront': ['SmoothieFruitsSide_00', 'SmoothieFruitsSide_01', 'SmoothieFruits_00', 'SmoothieFruits_01'],
+                'SubQuestInformation': ['N_QuestComplete_00'],
+                'QuestInformation': ['N_QuestComplete_00'],
+                'SmoothieChoose': ['N_Preview_01', 'N_Title_00', 'N_ListPosition_00'],
+                'SmoothieMenu': ['N_List_00', 'N_Select_00'],
+                'Operate': ['N_InOut_00'],
+                'MessageWindowGuide': ['N_DecideOut_00'],
+                'MessageWindow': ['A_Choice_00'],
+                'MessageWindowShop': ['A_Choice_00'],
+                'RecipeMenu': ['N_Title_00', 'N_ListPosition_00', 'N_Preview_00'],
+                'LinkItemMenu': ['A_Rupee_00'],
+                'Title': ['N_InOut_00']
+            }
+            patch_ui_layouts(layout_map)
 
         # To mirror an object, do -x scale, and 180 roate y. For example, if we want to mirror something that is 
 

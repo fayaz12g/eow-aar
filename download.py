@@ -9,10 +9,7 @@ def download_extract_copy(input_folder, mod_name):
     directory_path = f"C:/Users/{username}/AppData/Roaming/AnyAspectRatio/perm/eow"
 
     zip_urls = [
-        ("https://github.com/fayaz12g/aar-files/raw/main/eow/echoes1.zip", "echoes1.zip"),
-        ("https://github.com/fayaz12g/aar-files/raw/main/eow/echoes2.zip", "echoes2.zip"),
-        ("https://github.com/fayaz12g/aar-files/raw/main/eow/echoes3.zip", "echoes3.zip"),
-        ("https://github.com/fayaz12g/aar-files/raw/main/eow/echoes4.zip", "echoes4.zip")
+        ("https://github.com/fayaz12g/aar-files/raw/main/eow/echoes.zip", "echoes.zip")
     ]
 
     # Check if the directory exists, create if it doesn't
@@ -25,7 +22,7 @@ def download_extract_copy(input_folder, mod_name):
     if os.path.exists(extract_folder):
         shutil.rmtree(extract_folder)
 
-    print(f"Checking if 4 part zip files exist.")
+    print(f"Checking if zip file exists.")
 
     # Download or extract each zip file
     for zip_url, zip_filename in zip_urls:

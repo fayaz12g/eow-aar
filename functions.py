@@ -16,7 +16,7 @@ def make_hex(x, r):
     return hex_value
 
 def hex2float(h):
-    return struct.unpack('>f', bytes.fromhex(h))[0]
+    return struct.unpack('<f', struct.pack('>I', int(h, 16)))[0]
 
 def asm_to_hex(asm_code):
     ks = Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)

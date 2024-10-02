@@ -33,12 +33,14 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                     current_value_hex = content[idx:idx+8]
                     current_value = hex2float(current_value_hex)
                     
+                    print(f"Before: {pane} of {filename} at {current_value}")
+                    
                     new_value = (current_value * s1**-1)
                     new_value_hex = float2hex(new_value)
                     
-                    content = content[:idx] + new_value_hex + content[idx+8:]
+                    print(f"After: {pane} of {filename} to {new_value}")
                     
-                    print(f"Shifting {pane} of {filename}")
+                    content = content[:idx] + new_value_hex + content[idx+8:]
                 
                 with open(full_path_of_file, 'wb') as f:
                     f.write(bytes.fromhex(content))

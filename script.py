@@ -45,7 +45,13 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                     'MessageWindowShop': ['A_Choice_00'],
                     'RecipeMenu': ['N_Title_00', 'N_ListPosition_00', 'N_Preview_00'],
                     'LinkItemMenu': ['A_Rupee_00'],
-                    'Title': ['N_InOut_00']
+                    'Title': ['N_InOut_00'],
+                    'SubMenuHeader': ['N_Header_00', 'N_Footer_00', 'N_CategoryList_00'],
+                    'MenuHeader':['N_Header_00', 'N_Footer_00', 'N_CategoryList_00'],
+                    'MapPopUp':['N_Offset_00'],
+                    'Option':['N_Description_00', 'A_List_00'],
+                    'DictionaryList':['N_PageInOut_00', 'L_Scrollbar_00', 'L_Scrollbar_00', 'L_SortInfo_00'],
+                    'GameOver':['N_DlgSel_00', 'A_alignment_00', 'T_GameOver_00'],
                 }
 
     def patch_ui_layouts(layout_map, direction):
@@ -78,6 +84,9 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                     
                     new_value = (current_value * s1**-1)
                     new_value_hex = float2hex(new_value)
+
+                    if pane == "L_SetItem_00" or pane == "L_SetItem_01" or pane == "L_SetItem_02" :
+                        print(pane, current_value, new_value)
                     
                     content = content[:idx] + new_value_hex + content[idx+8:]
                 
@@ -217,6 +226,9 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
 
         patch_blyt('ScreenMainMenu', 'RootPane', 'scale_x', 1/s1)
 
+        patch_blyt('GameOver', 'P_DisplaySub_00', 'scale_x', 1/s1)
+        patch_blyt('GameOver', 'P_DisplayAdd_01', 'scale_x', 1/s1)
+
 
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
@@ -237,7 +249,25 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                 print(f"Scaling root pane vertically for {name}")
                 patch_blyt(name, 'RootPane', 'scale_y', s1)
              
-    
+        patch_blyt('SubMenuHeader', 'N_Header_00', 'scale_y', 1/s1)
+        patch_blyt('SubMenuHeader', 'N_Footer_00', 'scale_y', 1/s1)
+        patch_blyt('MenuHeader', 'P_pict_04', 'scale_y', 1/s1)
+        patch_blyt('MenuHeader', 'N_Header_00', 'scale_y', 1/s1)
+        patch_blyt('MenuHeader', 'N_Footer_00', 'scale_y', 1/s1)
+        patch_blyt('ScreenCapture', 'RootPane', 'scale_y', 1/s1)
+
+        patch_blyt('L_CommonModal', 'P_footer_00', 'scale_y', 1/s1)
+        patch_blyt('L_CommonModal', 'N_Win_00', 'scale_y', 1/s1)
+        patch_blyt('L_CommonModal', 'S_Graphic_00', 'scale_y', 1/s1)
+
+        patch_blyt('SmoothieBgFront', 'W_FootSdw_00', 'scale_y', 1/s1)
+
+        patch_blyt('MapMenu', 'L_SubHeaderLine_00', 'scale_y', 1/s1)
+
+        patch_blyt('ScreenMainMenu', 'RootPane', 'scale_y', 1/s1)
+
+        patch_blyt('GameOver', 'P_DisplaySub_00', 'scale_y', 1/s1)
+        patch_blyt('GameOver', 'P_DisplayAdd_01', 'scale_y', 1/s1)
 
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")

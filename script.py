@@ -54,7 +54,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
                     'GameOver':['N_DlgSel_00', 'A_alignment_00', 'T_GameOver_00'],
                 }
 
-    def patch_ui_layouts(layout_map, direction):
+    def patch_ui_layouts(direction):
         if direction == "x":
             offset = 0x40
         if direction == 'y':
@@ -233,7 +233,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
     
-            patch_ui_layouts(layout_map, "x")
+            patch_ui_layouts("x")
 
         # To mirror an object, do -x scale, and 180 roate y. For example, if we want to mirror something that is 
 
@@ -272,4 +272,4 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
             
-            patch_ui_layouts(layout_map, "y")
+            patch_ui_layouts("y")

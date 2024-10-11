@@ -230,6 +230,13 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
         patch_blyt('GameOver', 'P_DisplayAdd_01', 'scale_x', 1/s1)
 
 
+        patch_blyt('ActorCostDown', 'N_Blur_00', 'scale_x', 1/s1)
+        patch_blyt('ActorCostDown', 'P_DisplyMask_00', 'scale_x', 1/s1)
+        patch_blyt('ActorCostDown', 'N_Loop_00', 'scale_x', 1/s1)
+
+        patch_blyt('ActorSelect', 'P_Pattern_02', 'scale_x', 1/s1)    
+        patch_blyt('ActorSelect', 'P_Pattern_03', 'scale_x', 1/s1)
+
         if HUD_pos == 'corner':
             print("Shifitng elements for corner HUD")
     

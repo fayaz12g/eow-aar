@@ -33,12 +33,13 @@ from extract import extract_blarc
 from functions import *
 import pyautogui
 from video import *
+from controller import *
 
 #######################
 #### Create Window ####
 #######################
 
-tool_version = "1.1.1"
+tool_version = "2.0.0"
 
 root = customtkinter.CTk()
 root.title(f"Fayaz's Settings {tool_version} for Echoes of Wisdom")
@@ -56,14 +57,20 @@ windowtitle = customtkinter.CTkLabel(master=root, font=(CTkFont, 20), text="Faya
 screen_width, screen_height = pyautogui.size()
 ar_numerator = StringVar(value=f"{screen_width}")
 ar_denominator = StringVar(value=f"{screen_height}")
-do_DOF = BooleanVar(value=False)
-do_lod = BooleanVar(value=False)
-do_2k = BooleanVar(value=False)
+do_DOF = BooleanVar(value=True)
+do_lod = BooleanVar(value=True)
+do_2k = BooleanVar(value=True)
 do_video = BooleanVar(value=False)
 do_main = BooleanVar(value=True)
 cutscene_zoomed = BooleanVar(value=False)
 
+remove_bloom = BooleanVar(value=True)
+reduce_bloom = BooleanVar(value=False)
+res1920 = BooleanVar(value=False)
+res2560 = BooleanVar(value=True)
 
+bloom = "2"
+resolution = "0"
 
 
 # Legacy Visuals
@@ -291,14 +298,6 @@ def select_mario_folder():
         print("Center HUD")
         HUD_pos = "center"
 
-    ##################
-    ## Cutscene Fix ##
-    ##################
-    
-    if do_video.get():
-        output_folder = os.path.join(romfs_folder, "region_common", "movie")
-        # download_video_files(text_folder)
-        process_videos_in_folder(str(scaling_factor), output_folder)
 
     if do_main.get():
 
@@ -307,16 +306,36 @@ def select_mario_folder():
         ##################
 
         if os.path.exists(text_folder):
+            print("Removing existing mod...")
             shutil.rmtree(text_folder)
+            print("Removed.")
+
+        #########################
+        ####### CONTROLLER ######
+        #########################
+
+        controller = controller_type.get()
+        print("Controller type is set to", controller)
 
         #################
         ## Downloading ##
         #################
 
-        download_extract_copy(input_folder, mod_name)
+        download_extract_copy(input_folder, mod_name, controller)
+
+        # Do the visual stuff first
+        if reduce_bloom.get():
+            bloom == "1"
+        if remove_bloom.get():
+            bloom == "0"
+        if res1920.get():
+            resolution == "1920"
+        if res2560.get():
+            resolution == "2560"
+
+        visual_fixes = create_visuals(do_DOF.get(), do_lod.get(), do_2k.get(), bloom, resolution)
 
         # Create the PCHTXT Files
-        visual_fixes = create_visuals(do_DOF.get(), do_lod.get(), do_2k.get())
         create_patch_files(patch_folder, str(ratio_value), str(scaling_factor), visual_fixes)
 
         ####################
@@ -330,7 +349,7 @@ def select_mario_folder():
                     print(f"Extracting {file}.")
                     extract_blarc(file_path)
                     os.remove(file_path)
-                    
+
         ###########################
         # Perform Pane Strecthing #
         ###########################
@@ -384,8 +403,16 @@ def pack_widgets():
     lod_checkbox.pack(padx=5, pady=5)
     cutscene_checkbox.pack(padx=5, pady=5)
     shadow_checkbox.pack(padx=10, pady=10)
+
+    remove_checkbox.pack(padx=10, pady=10)
+    reduce_checkbox.pack(padx=10, pady=10)
+    res1920_checkbox.pack(padx=10, pady=10)
+    res2560_checkbox.pack(padx=10, pady=10)
     
     content_frame.pack(padx=10, pady=10)
+
+    controller_type_label.pack(padx=10, pady=10)
+    controller_type_dropdown.pack(padx=10, pady=10)
 
     hud_label.pack()
     center_checkbox.pack()
@@ -430,7 +457,15 @@ def forget_packing():
     shadow_checkbox.pack_forget()
     cutscene_checkbox.pack_forget()
 
+    remove_checkbox.pack_forget()
+    reduce_checkbox.pack_forget()
+    res1920_checkbox.pack_forget()
+    res2560_checkbox.pack_forget()
+
     content_frame.pack_forget()
+
+    controller_type_label.pack_forget()
+    controller_type_dropdown.pack_forget()
 
     hud_label.pack_forget()
     center_checkbox.pack_forget()
@@ -494,6 +529,11 @@ lod_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="I
 shadow_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="2X Shadow Resolution", variable=do_2k)
 cutscene_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Zoomed Cutscenes (and Title Screen)", variable=cutscene_zoomed)
 
+res1920_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="1920x1080 Docked Resolution", variable=res1920, command=lambda: [res2560.set(False), repack_widgets])
+res2560_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="2560x1440 Docked Resolution", variable=res2560, command=lambda: [res1920.set(False), repack_widgets])
+reduce_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Reduce Bloom", variable=reduce_bloom, command=lambda: [remove_bloom.set(False), repack_widgets])
+remove_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), text="Remove Bloom", variable=remove_bloom, command=lambda: [reduce_bloom.set(False), repack_widgets])
+
 
 ##########################
 ####### Controller #######
@@ -501,8 +541,15 @@ cutscene_checkbox = customtkinter.CTkCheckBox(master=notebook.tab("Visuals"), te
 
 notebook.add("Controller")
     
+selected_controller_type = controller_type.get().lower()
+selected_controller_color = controller_color.get().lower()
+selected_button_layout = button_layout.get().lower()
 
-notebook.delete("Controller") # delete this line to readd controller options
+image_layout_label= customtkinter.CTkLabel(master=notebook.tab("Controller"), text=f"{controller_layout_label}", font=("Roboto", 11, "bold"))
+
+controller_type_label= customtkinter.CTkLabel(master=notebook.tab("Controller"), text="Controller Type:")
+controller_type_dropdown = customtkinter.CTkOptionMenu(master=notebook.tab("Controller"), variable=controller_type, values=controller_types)
+
 
 ###################
 ####### HUD #######
@@ -560,6 +607,10 @@ credits_label = ClickableLabel(master=notebook.tab("Credits"), text=
                      '\n\nMade possible by\n'
                      'Fl4sh_#9174\n'
                      'for the 3d elements aspect ratio fix'
+                     '\nCompC on GameBanana\n'
+                     'for the current Dualsense implementation'
+                    '\FellowDemo on GameBanana\n'
+                     'for the current Xbox UI implementation'
                      '\n\nWith special help from\n'
                      'Christopher Fields (cfields7)\n'
                      'for code beautification and being a great best friend :)'))

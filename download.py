@@ -4,12 +4,12 @@ import zipfile
 import shutil
 import getpass
 
-def download_extract_copy(input_folder, mod_name):
+def download_extract_copy(input_folder, mod_name, controller):
     username = getpass.getuser()
     directory_path = f"C:/Users/{username}/AppData/Roaming/AnyAspectRatio/perm/eow"
 
     zip_urls = [
-        ("https://github.com/fayaz12g/aar-files/raw/main/eow/echoes.zip", "echoes.zip")
+        (f"https://github.com/fayaz12g/aar-files/raw/main/eow/{controller}.zip", f"{controller}.zip")
     ]
 
     # Check if the directory exists, create if it doesn't

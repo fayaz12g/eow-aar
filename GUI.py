@@ -620,7 +620,7 @@ credits_label = ClickableLabel(master=notebook.tab("Credits"), text=
                      'for the 3d elements aspect ratio fix'
                      '\nCompC on GameBanana\n'
                      'for the current Dualsense implementation'
-                    '\FellowDemo on GameBanana\n'
+                    '\nFellowDemo on GameBanana\n'
                      'for the current Xbox UI implementation'
                      '\n\nWith special help from\n'
                      'Christopher Fields (cfields7)\n'

@@ -33,6 +33,7 @@ from extract import extract_blarc
 from functions import *
 import pyautogui
 from video import *
+from keystone import *
 from controller import *
 
 #######################

@@ -1,9 +1,14 @@
 import struct
 import keystone
 from keystone import *
+
 import binascii
 import math
 import os
+from keystone.keystone_const import *
+
+from keystone import Ks
+
 
 def make_hex(x, r):
     p = math.floor(math.log(x, 2))

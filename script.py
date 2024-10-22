@@ -154,7 +154,7 @@ def patch_blarc(aspect_ratio, HUD_pos, unpacked_folder, cutscene_zoomed):
             
     blyt_folder = os.path.abspath(os.path.join(unpacked_folder))
     
-    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu", "StaffRoll", "SmoothieBg", "BlindScreen"]
+    do_not_scale_rootpane = ["Fade", "ScreenCapture", "FrontBlindScreen", "ScreenMainMenu", "ScreenSubMenu", "StaffRoll", "SmoothieBg", "BlindScreen", "LockOnCursor"]
    
     rootpane_by_y = []
 

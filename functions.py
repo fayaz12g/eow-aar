@@ -1,5 +1,5 @@
 import struct
-import keystone
+import keystone as Ks
 from keystone import *
 
 import binascii
@@ -7,7 +7,6 @@ import math
 import os
 from keystone.keystone_const import *
 
-from keystone import Ks
 
 
 def make_hex(x, r):

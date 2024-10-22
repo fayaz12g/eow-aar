@@ -34,6 +34,7 @@ from functions import *
 import pyautogui
 from video import *
 from keystone import *
+import keystone as Ks
 from controller import *
 
 #######################

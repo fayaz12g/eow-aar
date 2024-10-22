@@ -315,8 +315,11 @@ def select_mario_folder():
         #########################
 
         controller = controller_type.get()
-        if controller_layout == "Western":
-            controller == controller + "2"
+        layout = controller_layout.get()
+
+        if layout == "Western":
+            controller = controller + "2"
+
         print("Controller type is set to", controller)
 
         #################

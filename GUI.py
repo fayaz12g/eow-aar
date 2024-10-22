@@ -62,7 +62,7 @@ do_lod = BooleanVar(value=True)
 do_2k = BooleanVar(value=True)
 do_video = BooleanVar(value=False)
 do_main = BooleanVar(value=True)
-cutscene_zoomed = BooleanVar(value=False)
+cutscene_zoomed = BooleanVar(value=True)
 
 remove_bloom = BooleanVar(value=True)
 reduce_bloom = BooleanVar(value=False)

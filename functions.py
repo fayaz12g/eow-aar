@@ -1,11 +1,32 @@
 import struct
-import keystone as Ks
-from keystone import *
+# from keystone import *
 
 import binascii
 import math
 import os
-from keystone.keystone_const import *
+# from keystone.keystone_const import *
+
+# from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN
+
+
+def make_movz_hex(immediate, reg):
+    # MOVZ (1101 0101 op 1 hw Rd)
+    opcode = 0b1101010101000000
+    imm = (immediate & 0xFFFF) << 5
+    reg_code = reg & 0b11111  # lower 5 bits for the register
+    instruction = opcode | imm | reg_code
+    hex_value = '{:08x}'.format(instruction).upper()
+    return hex_value
+
+def make_movk_hex(immediate, reg, shift):
+    # MOVK (1111 0101 op 1 hw Rd)
+    opcode = 0b1111010101000000
+    imm = (immediate & 0xFFFF) << 5
+    shift_code = (shift // 16) << 21  # Determine hw field from shift
+    reg_code = reg & 0b11111  # lower 5 bits for the register
+    instruction = opcode | shift_code | imm | reg_code
+    hex_value = '{:08x}'.format(instruction).upper()
+    return hex_value
 
 
 
@@ -22,22 +43,31 @@ def make_hex(x, r):
 def hex2float(h):
     return struct.unpack('<f', struct.pack('>I', int(h, 16)))[0]
 
-def asm_to_hex(asm_code):
-    ks = Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)
-    encoding, count = ks.asm(asm_code)
-    return ''.join('{:02x}'.format(x) for x in encoding)
+# def asm_to_hex(asm_code):
+#     ks = Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)
+#     encoding, count = ks.asm(asm_code)
+#     return ''.join('{:02x}'.format(x) for x in encoding)
 
 def eow_hex23(num):
     num = round(num, 15)
     packed = struct.pack('!f', num)
     full_hex = ''.join('{:02x}'.format(b) for b in packed)
-    hex_1 = full_hex[:4]
-    hex_2 = full_hex[4:]
-    asm_1 = f"movz w9, #0x{hex_2}"
-    asm_2 = f"movk w9, #0x{hex_1}, lsl #16"
-    hex_value1 = asm_to_hex(asm_1)
-    hex_value2 = asm_to_hex(asm_2)
+    hex_1 = full_hex[:4]  # Upper 16 bits
+    hex_2 = full_hex[4:]  # Lower 16 bits
+    
+    # Convert to decimal for MOVZ/MOVK functions
+    imm_1 = int(hex_1, 16)
+    imm_2 = int(hex_2, 16)
+    
+    # Register 9 for w9
+    reg = 9
+    
+    # Use manual conversion functions
+    hex_value1 = make_movz_hex(imm_2, reg)
+    hex_value2 = make_movk_hex(imm_1, reg, shift=16)
+    
     return hex_value1, hex_value2
+
 
 def float2hex(f):
         return hex(struct.unpack('>I', struct.pack('<f', f))[0]).lstrip('0x').rjust(8,'0').upper()

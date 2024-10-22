@@ -41,7 +41,7 @@ from controller import *
 #### Create Window ####
 #######################
 
-tool_version = "2.0.0"
+tool_version = "2.0.1"
 
 root = customtkinter.CTk()
 root.title(f"Fayaz's Settings {tool_version} for Echoes of Wisdom")

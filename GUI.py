@@ -81,14 +81,14 @@ staticfpsoptions = ["20", "30", "60"]
 # Controller
 controller_types = ["Switch", "Xbox", "Playstation"]
 
-full_button_layouts = ["Normal"]
-deck_button_layouts = ["Normal"]
+controller_layouts = ["Normal", "Western"]
 
 dualsense_colors = ["Red", "White", "Blue", "Pink", "Purple", "Black"]
 
 colored_button_colors = ["White"]
 
 controller_type = StringVar(value="Switch")
+controller_layout = StringVar(value="Normal")
 button_color = StringVar()
 controller_color = StringVar()
 button_layout = StringVar()
@@ -315,6 +315,8 @@ def select_mario_folder():
         #########################
 
         controller = controller_type.get()
+        if controller_layout == "Western":
+            controller == controller + "2"
         print("Controller type is set to", controller)
 
         #################
@@ -414,6 +416,9 @@ def pack_widgets():
     controller_type_label.pack(padx=10, pady=10)
     controller_type_dropdown.pack(padx=10, pady=10)
 
+    controller_layout_label.pack(padx=10, pady=10)
+    controller_layout_dropdown.pack(padx=10, pady=10)
+
     hud_label.pack()
     center_checkbox.pack()
     corner_checkbox.pack(padx=10, pady=10) 
@@ -466,6 +471,9 @@ def forget_packing():
 
     controller_type_label.pack_forget()
     controller_type_dropdown.pack_forget()
+
+    controller_layout_label.pack_forget()
+    controller_layout_dropdown.pack_forget()
 
     hud_label.pack_forget()
     center_checkbox.pack_forget()
@@ -549,6 +557,9 @@ image_layout_label= customtkinter.CTkLabel(master=notebook.tab("Controller"), te
 
 controller_type_label= customtkinter.CTkLabel(master=notebook.tab("Controller"), text="Controller Type:")
 controller_type_dropdown = customtkinter.CTkOptionMenu(master=notebook.tab("Controller"), variable=controller_type, values=controller_types)
+
+controller_layout_label= customtkinter.CTkLabel(master=notebook.tab("Controller"), text="Controller Layout:")
+controller_layout_dropdown = customtkinter.CTkOptionMenu(master=notebook.tab("Controller"), variable=controller_layout, values=controller_layouts)
 
 
 ###################

@@ -9,25 +9,47 @@ import os
 # from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN
 
 
-def make_movz_hex(immediate, reg):
-    # MOVZ (1101 0101 op 1 hw Rd)
-    opcode = 0b1101010101000000
-    imm = (immediate & 0xFFFF) << 5
-    reg_code = reg & 0b11111  # lower 5 bits for the register
-    instruction = opcode | imm | reg_code
-    hex_value = '{:08x}'.format(instruction).upper()
-    return hex_value
+def mov_to_hex(value):
+    """
+    Convert a hex value to MOV instruction hex for ARM64
+    Example: 0xe38e -> C9719C52
+    """
+    if isinstance(value, str):
+        # Strip '0x' if present and convert to int
+        value = int(value.replace('0x', ''), 16)
+    
+    # Extract the 16-bit value
+    imm16 = value & 0xFFFF
+    
+    # Generate the parts
+    byte0 = 0xC9  # Register and part of immediate
+    byte1 = 0x71  # Part of immediate
+    byte2 = 0x9C  # Rest of immediate
+    byte3 = 0x52  # Instruction encoding
+    
+    # Combine into final hex string
+    return f"{byte0:02X}{byte1:02X}{byte2:02X}{byte3:02X}"
 
-def make_movk_hex(immediate, reg, shift):
-    # MOVK (1111 0101 op 1 hw Rd)
-    opcode = 0b1111010101000000
-    imm = (immediate & 0xFFFF) << 5
-    shift_code = (shift // 16) << 21  # Determine hw field from shift
-    reg_code = reg & 0b11111  # lower 5 bits for the register
-    instruction = opcode | shift_code | imm | reg_code
-    hex_value = '{:08x}'.format(instruction).upper()
-    return hex_value
-
+def movk_to_hex(value):
+    """
+    Convert a hex value to MOVK instruction hex with LSL #16 for ARM64
+    Example: 0x4018 -> 0903A872
+    """
+    if isinstance(value, str):
+        # Strip '0x' if present and convert to int
+        value = int(value.replace('0x', ''), 16)
+    
+    # Extract the 16-bit value
+    imm16 = value & 0xFFFF
+    
+    # Generate the parts
+    byte0 = 0x09  # Register and part of immediate
+    byte1 = 0x03  # Part of immediate
+    byte2 = 0xA8  # Rest of immediate
+    byte3 = 0x72  # Instruction encoding
+    
+    # Combine into final hex string
+    return f"{byte0:02X}{byte1:02X}{byte2:02X}{byte3:02X}"
 
 
 def make_hex(x, r):
@@ -59,13 +81,10 @@ def eow_hex23(num):
     imm_1 = int(hex_1, 16)
     imm_2 = int(hex_2, 16)
     
-    # Register 9 for w9
-    reg = 9
-    
     # Use manual conversion functions
-    hex_value1 = make_movz_hex(imm_2, reg)
-    hex_value2 = make_movk_hex(imm_1, reg, shift=16)
-    
+    hex_value1 = mov_to_hex('0xe38e')
+    hex_value2 = movk_to_hex('0x4018')
+
     return hex_value1, hex_value2
 
 

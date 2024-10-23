@@ -33,15 +33,13 @@ from extract import extract_blarc
 from functions import *
 import pyautogui
 from video import *
-from keystone import *
-import keystone as Ks
 from controller import *
 
 #######################
 #### Create Window ####
 #######################
 
-tool_version = "2.0.3"
+tool_version = "2.0.4"
 
 root = customtkinter.CTk()
 root.title(f"Fayaz's Settings {tool_version} for Echoes of Wisdom")

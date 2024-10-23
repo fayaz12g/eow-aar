@@ -1,5 +1,5 @@
 import struct
-# from keystone import *
+from keystone import *
 
 import binascii
 import math
@@ -9,47 +9,67 @@ import os
 # from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN
 
 
-def mov_to_hex(value):
-    """
-    Convert a hex value to MOV instruction hex for ARM64
-    Example: 0xe38e -> C9719C52
-    """
-    if isinstance(value, str):
-        # Strip '0x' if present and convert to int
-        value = int(value.replace('0x', ''), 16)
+# def mov_to_hex(value):
+#     """
+#     Convert hex value to MOV instruction hex for ARM64
+#     Examples:
+#     mov w9, #0xe38e -> C9719C52
+#     mov w9, #0x4018 -> 09038852
+#     mov w9, #0x2014 -> 89028452
+#     """
+#     if isinstance(value, str):
+#         # Strip '0x' if present and convert to int
+#         value = int(value.replace('0x', ''), 16)
     
-    # Extract the 16-bit value
-    imm16 = value & 0xFFFF
+#     # Extract the 16-bit value
+#     imm16 = value & 0xFFFF
     
-    # Generate the parts
-    byte0 = 0xC9  # Register and part of immediate
-    byte1 = 0x71  # Part of immediate
-    byte2 = 0x9C  # Rest of immediate
-    byte3 = 0x52  # Instruction encoding
+#     # Break the immediate into its components
+#     imm_lo = imm16 & 0xFF
+#     imm_hi = (imm16 >> 8) & 0xFF
     
-    # Combine into final hex string
-    return f"{byte0:02X}{byte1:02X}{byte2:02X}{byte3:02X}"
+#     # Construct the instruction encoding
+#     rd = 9  # We're always using w9
+    
+#     # Build each byte
+#     byte0 = 0x80 | (imm_hi >> 4)  # Upper 4 bits of high byte
+#     if value > 0x8000:
+#         byte0 = 0xC0 | (imm_hi >> 4)
+#     byte1 = ((imm_hi & 0xF) << 4) | ((imm_lo >> 4) & 0xF)
+#     byte2 = 0x80 | ((imm_lo & 0xF) << 2) | rd
+#     byte3 = 0x52
+    
+#     return f"{byte0:02X}{byte1:02X}{byte2:02X}{byte3:02X}"
 
-def movk_to_hex(value):
-    """
-    Convert a hex value to MOVK instruction hex with LSL #16 for ARM64
-    Example: 0x4018 -> 0903A872
-    """
-    if isinstance(value, str):
-        # Strip '0x' if present and convert to int
-        value = int(value.replace('0x', ''), 16)
+# def movk_to_hex(value):
+#     """
+#     Convert hex value to MOVK instruction hex for ARM64
+#     Examples:
+#     movk w9, #0x4018, lsl #16 -> 0903A872
+#     movk w9, #0xe38e, lsl #16 -> C971BC72
+#     movk w9, #0xe99a, lsl #16 -> 4933BD72
+#     """
+#     if isinstance(value, str):
+#         # Strip '0x' if present and convert to int
+#         value = int(value.replace('0x', ''), 16)
     
-    # Extract the 16-bit value
-    imm16 = value & 0xFFFF
+#     # Extract the 16-bit value
+#     imm16 = value & 0xFFFF
     
-    # Generate the parts
-    byte0 = 0x09  # Register and part of immediate
-    byte1 = 0x03  # Part of immediate
-    byte2 = 0xA8  # Rest of immediate
-    byte3 = 0x72  # Instruction encoding
+#     # Break the immediate into its components
+#     imm_lo = imm16 & 0xFF
+#     imm_hi = (imm16 >> 8) & 0xFF
     
-    # Combine into final hex string
-    return f"{byte0:02X}{byte1:02X}{byte2:02X}{byte3:02X}"
+#     # Construct the instruction encoding
+#     rd = 9  # We're always using w9
+    
+#     # Build each byte
+#     byte0 = 0x09
+#     byte1 = ((imm_hi & 0xF) << 4) | ((imm_lo >> 4) & 0xF)
+#     byte2 = 0xA0 | ((imm_lo & 0xF) << 2) | rd
+#     byte3 = 0x72
+    
+#     return f"{byte0:02X}{byte1:02X}{byte2:02X}{byte3:02X}"
 
 
 def make_hex(x, r):
@@ -70,22 +90,41 @@ def hex2float(h):
 #     encoding, count = ks.asm(asm_code)
 #     return ''.join('{:02x}'.format(x) for x in encoding)
 
+def asm_to_hex(asm_code):
+    ks = Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)
+    encoding, count = ks.asm(asm_code)
+    return ''.join('{:02x}'.format(x) for x in encoding)
+
 def eow_hex23(num):
     num = round(num, 15)
     packed = struct.pack('!f', num)
     full_hex = ''.join('{:02x}'.format(b) for b in packed)
-    hex_1 = full_hex[:4]  # Upper 16 bits
-    hex_2 = full_hex[4:]  # Lower 16 bits
-    
-    # Convert to decimal for MOVZ/MOVK functions
-    imm_1 = int(hex_1, 16)
-    imm_2 = int(hex_2, 16)
-    
-    # Use manual conversion functions
-    hex_value1 = mov_to_hex(imm_2)
-    hex_value2 = movk_to_hex(imm_1)
-
+    hex_1 = full_hex[:4]
+    hex_2 = full_hex[4:]
+    asm_1 = f"movz w9, #0x{hex_2}"
+    asm_2 = f"movk w9, #0x{hex_1}, lsl #16"
+    hex_value1 = asm_to_hex(asm_1)
+    hex_value2 = asm_to_hex(asm_2)
     return hex_value1, hex_value2
+
+# def eow_hex23(num):
+#     num = round(num, 15)
+#     packed = struct.pack('!f', num)
+#     full_hex = ''.join('{:02x}'.format(b) for b in packed)
+#     hex_1 = full_hex[:4]  # Upper 16 bits
+#     hex_2 = full_hex[4:]  # Lower 16 bits
+    
+#     # Convert to decimal for MOVZ/MOVK functions
+#     imm_1 = str(f'0x{hex_1}')
+#     imm_2 = str(f'0x{hex_2}')
+    
+#     # Use manual conversion functions
+#     hex_value1 = mov_to_hex(imm_2)
+#     hex_value2 = movk_to_hex(imm_1)
+
+#     print(imm_2, hex_value1, imm_1, hex_value2)
+
+#     return hex_value1, hex_value2
 
 
 def float2hex(f):

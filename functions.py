@@ -82,8 +82,8 @@ def eow_hex23(num):
     imm_2 = int(hex_2, 16)
     
     # Use manual conversion functions
-    hex_value1 = mov_to_hex('0xe38e')
-    hex_value2 = movk_to_hex('0x4018')
+    hex_value1 = mov_to_hex(imm_2)
+    hex_value2 = movk_to_hex(imm_1)
 
     return hex_value1, hex_value2
 
